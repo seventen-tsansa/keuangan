@@ -227,6 +227,38 @@
         </div>
     </div>
 
+    <!-- Tambahkan di bagian sebelum </div> container -->
+<div class="card">
+    <div class="card-header">
+        <h2>💾 Backup & Restore Data</h2>
+    </div>
+    <div class="actions-grid">
+        <button onclick="backupData()" class="action-btn success">
+            <span class="action-icon">📁</span>
+            <span class="action-text">Backup ke File</span>
+        </button>
+        <button onclick="restoreData()" class="action-btn warning">
+            <span class="action-icon">📂</span>
+            <span class="action-text">Restore dari File</span>
+        </button>
+        <button onclick="backupToText()" class="action-btn info">
+            <span class="action-icon">📋</span>
+            <span class="action-text">Copy ke Text</span>
+        </button>
+        <button onclick="restoreFromText()" class="action-btn danger">
+            <span class="action-icon">📝</span>
+            <span class="action-text">Paste dari Text</span>
+        </button>
+    </div>
+    <div class="info-box">
+        <strong>💡 Cara Sync Antar Device:</strong><br>
+        • <strong>Backup ke File</strong> → download file, kirim ke device lain<br>
+        • <strong>Copy ke Text</strong> → copy teks, paste di WA/email<br>
+        • Device lain: <strong>Restore</strong> untuk load data
+    </div>
+</div>
+
     <script src="script.js"></script>
 </body>
+
 </html>
