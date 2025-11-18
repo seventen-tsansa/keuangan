@@ -1,77 +1,36 @@
-// GitHub Sync Configuration
-let GITHUB_CONFIG = JSON.parse(localStorage.getItem('github_config')) || null;
+// CONFIG GITHUB - GANTI DENGAN DATA LU!
+const GITHUB_USERNAME = "seventen_tsansa";      // Ganti dengan username GitHub lu
+const GITHUB_REPO = "keuangan";        // Ganti dengan nama repo
+const GITHUB_TOKEN = "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";        // Ganti dengan token lu
+
 let dataKas = {};
 let kasAktif = 'kas_kelas';
 let mingguAktif = 1;
 let modalTerbuka = false;
 let tampilTotal = false;
 
-// Initialize App
-async function init() {
-    // Cek apakah GitHub sync sudah disetup
-    if (!GITHUB_CONFIG) {
-        document.getElementById('modalGitHubSetup').style.display = 'block';
-        return;
-    }
-    
-    // Load data dari GitHub
-    await loadDataFromGitHub();
-    updateTampilan();
-    initMingguSelector();
-}
-
-// Setup GitHub Sync
-async function setupGitHubSync() {
-    const username = document.getElementById('githubUsername').value.trim();
-    const repo = document.getElementById('githubRepo').value.trim();
-    const token = document.getElementById('githubToken').value.trim();
-    
-    if (!username || !repo || !token) {
-        alert('Harap isi semua field!');
-        return;
-    }
-    
-    GITHUB_CONFIG = {
-        username: username,
-        repo: repo,
-        token: token
-    };
-    
-    localStorage.setItem('github_config', JSON.stringify(GITHUB_CONFIG));
-    document.getElementById('modalGitHubSetup').style.display = 'none';
-    
-    // Load data pertama kali
-    await loadDataFromGitHub();
-    updateTampilan();
-    initMingguSelector();
-    
-    alert('✅ GitHub Sync berhasil disetup!');
-}
-
 // Load data dari GitHub
 async function loadDataFromGitHub() {
     try {
-        const response = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.username}/${GITHUB_CONFIG.repo}/contents/data.json`);
+        console.log('🔄 Loading data dari GitHub...');
+        const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/data.json`);
         
-        if (!response.ok) {
-            throw new Error('Gagal load data dari GitHub');
-        }
+        if (!response.ok) throw new Error('Gagal load data');
         
         const fileData = await response.json();
         const content = JSON.parse(atob(fileData.content));
         dataKas = content;
+        console.log('✅ Data loaded dari GitHub:', dataKas);
         
-        console.log('✅ Data loaded dari GitHub');
     } catch (error) {
         console.error('❌ Gagal load dari GitHub:', error);
-        // Fallback ke localStorage jika ada
+        // Fallback ke localStorage
         const localData = JSON.parse(localStorage.getItem('data_kas'));
         if (localData) {
             dataKas = localData;
             console.log('✅ Data loaded dari localStorage');
         } else {
-            // Load dari file data.json yang sudah ada di repo
-            alert('❌ Gagal load data. Pastikan file data.json sudah ada di repo.');
+            console.log('❌ Tidak ada data backup');
         }
     }
 }
@@ -79,19 +38,21 @@ async function loadDataFromGitHub() {
 // Save data ke GitHub
 async function saveDataToGitHub() {
     try {
+        console.log('💾 Saving data ke GitHub...');
+        
         // Get current file SHA
-        const getResponse = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.username}/${GITHUB_CONFIG.repo}/contents/data.json`);
+        const getResponse = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/data.json`);
         const currentFile = await getResponse.json();
         
         // Update file
-        const updateResponse = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.username}/${GITHUB_CONFIG.repo}/contents/data.json`, {
+        const updateResponse = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/data.json`, {
             method: 'PUT',
             headers: {
-                'Authorization': `token ${GITHUB_CONFIG.token}`,
+                'Authorization': `token ${GITHUB_TOKEN}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                message: `Update data kas - ${new Date().toLocaleString()}`,
+                message: `Update kas - ${new Date().toLocaleString()}`,
                 content: btoa(JSON.stringify(dataKas, null, 2)),
                 sha: currentFile.sha
             })
@@ -99,7 +60,6 @@ async function saveDataToGitHub() {
         
         if (updateResponse.ok) {
             console.log('✅ Data tersimpan di GitHub');
-            // Juga simpan di localStorage sebagai backup
             localStorage.setItem('data_kas', JSON.stringify(dataKas));
         } else {
             throw new Error('Gagal update file');
@@ -108,9 +68,20 @@ async function saveDataToGitHub() {
         console.error('❌ Gagal save ke GitHub:', error);
         // Fallback ke localStorage
         localStorage.setItem('data_kas', JSON.stringify(dataKas));
-        alert('⚠️ Gagal sync ke GitHub, data disimpan lokal saja.');
+        alert('⚠️ Gagal sync, data disimpan lokal.');
     }
 }
+
+// Initialize App
+async function init() {
+    await loadDataFromGitHub();
+    updateTampilan();
+    initMingguSelector();
+    console.log('🚀 App initialized dengan data:', dataKas);
+}
+
+// ... (SISANYA FUNGSI SAMA KAYA YANG SEBELUMNYA)
+// toggleBayar(), updateTampilan(), dll - PASTIKAN PAKE saveDataToGitHub()
 
 // Generate daftar minggu dari 14 Juli 2025 sampai Juni 2026
 function generateDaftarMinggu() {
@@ -599,3 +570,4 @@ function exportData() {
     csv += `Total Pengeluaran,${totalKeluar}\n`;
     csv += `Saldo Akhir,${saldo}\n`;
     csv
+
