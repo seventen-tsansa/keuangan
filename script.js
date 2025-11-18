@@ -657,3 +657,75 @@ window.onclick = function(event) {
 // Initialize app
 
 document.addEventListener('DOMContentLoaded', init);
+
+// === BACKUP & RESTORE FEATURE ===
+
+// Backup data ke file JSON
+function backupData() {
+    const data = JSON.stringify(dataKas, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `backup-kas-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    alert('✅ Backup berhasil! File JSON terdownload.');
+}
+
+// Restore data dari file JSON
+function restoreData() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = function(e) {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            try {
+                const restoredData = JSON.parse(event.target.result);
+                if (confirm('Yakin restore data? Data sekarang akan diganti!')) {
+                    dataKas = restoredData;
+                    localStorage.setItem('data_kas', JSON.stringify(dataKas));
+                    updateTampilan();
+                    alert('✅ Data berhasil di-restore!');
+                }
+            } catch (error) {
+                alert('❌ File backup tidak valid!');
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+}
+
+// Backup data ke text (buat copy-paste)
+function backupToText() {
+    const data = JSON.stringify(dataKas, null, 2);
+    const textarea = document.createElement('textarea');
+    textarea.value = data;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    alert('✅ Data berhasil dicopy ke clipboard! Paste di device lain.');
+}
+
+// Restore dari text
+function restoreFromText() {
+    const dataText = prompt('Paste data backup di sini:');
+    if (dataText) {
+        try {
+            const restoredData = JSON.parse(dataText);
+            if (confirm('Yakin restore data? Data sekarang akan diganti!')) {
+                dataKas = restoredData;
+                localStorage.setItem('data_kas', JSON.stringify(dataKas));
+                updateTampilan();
+                alert('✅ Data berhasil di-restore!');
+            }
+        } catch (error) {
+            alert('❌ Data backup tidak valid!');
+        }
+    }
+}
+
