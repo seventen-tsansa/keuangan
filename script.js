@@ -1,93 +1,122 @@
-let dataKas = JSON.parse(localStorage.getItem('data_kas')) || {
-    kas_kelas: {
-        nama: "Kas Kelas",
-        transaksi: [],
-        siswa: [
-            { id: 1, nama: "ABDULLAH FATHUL ISLAM", pembayaran: {} },
-            { id: 2, nama: "ADWA ZAHABI", pembayaran: {} },
-            { id: 3, nama: "AGUNG FATAHILLAH RIZKI PRATAMA", pembayaran: {} },
-            { id: 4, nama: "ALYA ANUGRAH MALVE", pembayaran: {} },
-            { id: 5, nama: "AMANDA PUTRI FADHILAH", pembayaran: {} },
-            { id: 6, nama: "ANISA INDAH ALIVIA", pembayaran: {} },
-            { id: 7, nama: "APRILIYA CLARHA AFANDI", pembayaran: {} },
-            { id: 8, nama: "ARRIVA NADZIRA", pembayaran: {} },
-            { id: 9, nama: "AULIA QURROTUL AINI", pembayaran: {} },
-            { id: 10, nama: "AYSHA ANINDYA RISELIN", pembayaran: {} },
-            { id: 11, nama: "DANESH ALYA JAZILA", pembayaran: {} },
-            { id: 12, nama: "FAHIRA AMANDA", pembayaran: {} },
-            { id: 13, nama: "FAIZA SHAKILA ARSHA", pembayaran: {} },
-            { id: 14, nama: "FAKHRY ARSYAD KHAYRI", pembayaran: {} },
-            { id: 15, nama: "FARHAN ANUGRAH DICHIOS", pembayaran: {} },
-            { id: 16, nama: "HABIL AKHTAR MAULANA", pembayaran: {} },
-            { id: 17, nama: "HAFIZ NOVEBRA ANTON", pembayaran: {} },
-            { id: 18, nama: "HANNI RAHMA NINDYA", pembayaran: {} },
-            { id: 19, nama: "INDAH FATIN SAHIRA", pembayaran: {} },
-            { id: 20, nama: "KAMILA YUKI CHARISA", pembayaran: {} },
-            { id: 21, nama: "KENZIE ARRASYU", pembayaran: {} },
-            { id: 22, nama: "KIRANA AZZAHRA", pembayaran: {} },
-            { id: 23, nama: "MUFTI FATUL HANIFA", pembayaran: {} },
-            { id: 24, nama: "MUHAMMAD ADLY PASHA", pembayaran: {} },
-            { id: 25, nama: "MUHAMMAD DZIKRI TAUFIQ ALBANI", pembayaran: {} },
-            { id: 26, nama: "MUHAMMAD GAZZA IBRAHIM", pembayaran: {} },
-            { id: 27, nama: "MUHAMMAD IKRAM ALFATH", pembayaran: {} },
-            { id: 28, nama: "NAKILA KHAFIQ RIYANTI", pembayaran: {} },
-            { id: 29, nama: "NAURA JAZILAH AKSA", pembayaran: {} },
-            { id: 30, nama: "RAUDHATUL HUMAIRA", pembayaran: {} },
-            { id: 31, nama: "SYARIFAH AINI AD-DIWARY", pembayaran: {} },
-            { id: 32, nama: "UFAIRA ZHAFIR AFENDI", pembayaran: {} }
-        ],
-        iuran: 5000
-    },
-    hari_guru: {
-        nama: "Hari Guru", 
-        transaksi: [],
-        siswa: [
-            { id: 1, nama: "ABDULLAH FATHUL ISLAM", pembayaran: {} },
-            { id: 2, nama: "ADWA ZAHABI", pembayaran: {} },
-            { id: 3, nama: "AGUNG FATAHILLAH RIZKI PRATAMA", pembayaran: {} },
-            { id: 4, nama: "ALYA ANUGRAH MALVE", pembayaran: {} },
-            { id: 5, nama: "AMANDA PUTRI FADHILAH", pembayaran: {} },
-            { id: 6, nama: "ANISA INDAH ALIVIA", pembayaran: {} },
-            { id: 7, nama: "APRILIYA CLARHA AFANDI", pembayaran: {} },
-            { id: 8, nama: "ARRIVA NADZIRA", pembayaran: {} },
-            { id: 9, nama: "AULIA QURROTUL AINI", pembayaran: {} },
-            { id: 10, nama: "AYSHA ANINDYA RISELIN", pembayaran: {} },
-            { id: 11, nama: "DANESH ALYA JAZILA", pembayaran: {} },
-            { id: 12, nama: "FAHIRA AMANDA", pembayaran: {} },
-            { id: 13, nama: "FAIZA SHAKILA ARSHA", pembayaran: {} },
-            { id: 14, nama: "FAKHRY ARSYAD KHAYRI", pembayaran: {} },
-            { id: 15, nama: "FARHAN ANUGRAH DICHIOS", pembayaran: {} },
-            { id: 16, nama: "HABIL AKHTAR MAULANA", pembayaran: {} },
-            { id: 17, nama: "HAFIZ NOVEBRA ANTON", pembayaran: {} },
-            { id: 18, nama: "HANNI RAHMA NINDYA", pembayaran: {} },
-            { id: 19, nama: "INDAH FATIN SAHIRA", pembayaran: {} },
-            { id: 20, nama: "KAMILA YUKI CHARISA", pembayaran: {} },
-            { id: 21, nama: "KENZIE ARRASYU", pembayaran: {} },
-            { id: 22, nama: "KIRANA AZZAHRA", pembayaran: {} },
-            { id: 23, nama: "MUFTI FATUL HANIFA", pembayaran: {} },
-            { id: 24, nama: "MUHAMMAD ADLY PASHA", pembayaran: {} },
-            { id: 25, nama: "MUHAMMAD DZIKRI TAUFIQ ALBANI", pembayaran: {} },
-            { id: 26, nama: "MUHAMMAD GAZZA IBRAHIM", pembayaran: {} },
-            { id: 27, nama: "MUHAMMAD IKRAM ALFATH", pembayaran: {} },
-            { id: 28, nama: "NAKILA KHAFIQ RIYANTI", pembayaran: {} },
-            { id: 29, nama: "NAURA JAZILAH AKSA", pembayaran: {} },
-            { id: 30, nama: "RAUDHATUL HUMAIRA", pembayaran: {} },
-            { id: 31, nama: "SYARIFAH AINI AD-DIWARY", pembayaran: {} },
-            { id: 32, nama: "UFAIRA ZHAFIR AFENDI", pembayaran: {} }
-        ],
-        iuran: 10000
-    }
-};
+// GitHub Sync Configuration
+let GITHUB_CONFIG = JSON.parse(localStorage.getItem('github_config')) || null;
+let dataKas = {};
 let kasAktif = 'kas_kelas';
 let mingguAktif = 1;
 let modalTerbuka = false;
 let tampilTotal = false;
 
+// Initialize App
+async function init() {
+    // Cek apakah GitHub sync sudah disetup
+    if (!GITHUB_CONFIG) {
+        document.getElementById('modalGitHubSetup').style.display = 'block';
+        return;
+    }
+    
+    // Load data dari GitHub
+    await loadDataFromGitHub();
+    updateTampilan();
+    initMingguSelector();
+}
+
+// Setup GitHub Sync
+async function setupGitHubSync() {
+    const username = document.getElementById('githubUsername').value.trim();
+    const repo = document.getElementById('githubRepo').value.trim();
+    const token = document.getElementById('githubToken').value.trim();
+    
+    if (!username || !repo || !token) {
+        alert('Harap isi semua field!');
+        return;
+    }
+    
+    GITHUB_CONFIG = {
+        username: username,
+        repo: repo,
+        token: token
+    };
+    
+    localStorage.setItem('github_config', JSON.stringify(GITHUB_CONFIG));
+    document.getElementById('modalGitHubSetup').style.display = 'none';
+    
+    // Load data pertama kali
+    await loadDataFromGitHub();
+    updateTampilan();
+    initMingguSelector();
+    
+    alert('✅ GitHub Sync berhasil disetup!');
+}
+
+// Load data dari GitHub
+async function loadDataFromGitHub() {
+    try {
+        const response = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.username}/${GITHUB_CONFIG.repo}/contents/data.json`);
+        
+        if (!response.ok) {
+            throw new Error('Gagal load data dari GitHub');
+        }
+        
+        const fileData = await response.json();
+        const content = JSON.parse(atob(fileData.content));
+        dataKas = content;
+        
+        console.log('✅ Data loaded dari GitHub');
+    } catch (error) {
+        console.error('❌ Gagal load dari GitHub:', error);
+        // Fallback ke localStorage jika ada
+        const localData = JSON.parse(localStorage.getItem('data_kas'));
+        if (localData) {
+            dataKas = localData;
+            console.log('✅ Data loaded dari localStorage');
+        } else {
+            // Load dari file data.json yang sudah ada di repo
+            alert('❌ Gagal load data. Pastikan file data.json sudah ada di repo.');
+        }
+    }
+}
+
+// Save data ke GitHub
+async function saveDataToGitHub() {
+    try {
+        // Get current file SHA
+        const getResponse = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.username}/${GITHUB_CONFIG.repo}/contents/data.json`);
+        const currentFile = await getResponse.json();
+        
+        // Update file
+        const updateResponse = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.username}/${GITHUB_CONFIG.repo}/contents/data.json`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${GITHUB_CONFIG.token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: `Update data kas - ${new Date().toLocaleString()}`,
+                content: btoa(JSON.stringify(dataKas, null, 2)),
+                sha: currentFile.sha
+            })
+        });
+        
+        if (updateResponse.ok) {
+            console.log('✅ Data tersimpan di GitHub');
+            // Juga simpan di localStorage sebagai backup
+            localStorage.setItem('data_kas', JSON.stringify(dataKas));
+        } else {
+            throw new Error('Gagal update file');
+        }
+    } catch (error) {
+        console.error('❌ Gagal save ke GitHub:', error);
+        // Fallback ke localStorage
+        localStorage.setItem('data_kas', JSON.stringify(dataKas));
+        alert('⚠️ Gagal sync ke GitHub, data disimpan lokal saja.');
+    }
+}
+
 // Generate daftar minggu dari 14 Juli 2025 sampai Juni 2026
 function generateDaftarMinggu() {
     const mingguList = [];
-    const startDate = new Date(2025, 6, 14); // 14 Juli 2025
-    const endDate = new Date(2026, 5, 30); // 30 Juni 2026
+    const startDate = new Date(2025, 6, 14);
+    const endDate = new Date(2026, 5, 30);
     
     let currentDate = new Date(startDate);
     let weekNumber = 1;
@@ -124,12 +153,6 @@ function getPeriodeMinggu() {
     const mingguList = generateDaftarMinggu();
     const mingguAktifData = mingguList.find(m => m.minggu === mingguAktif);
     return mingguAktifData || mingguList[0];
-}
-
-// Inisialisasi
-function init() {
-    updateTampilan();
-    initMingguSelector();
 }
 
 // Initialize minggu selector
@@ -191,10 +214,8 @@ function updateSaldo() {
     
     let transaksiYangDitampilkan;
     if (tampilTotal) {
-        // Tampilkan semua transaksi (total keseluruhan)
         transaksiYangDitampilkan = kas.transaksi;
     } else {
-        // Tampilkan hanya transaksi minggu ini
         transaksiYangDitampilkan = kas.transaksi.filter(t => t.minggu === mingguAktif);
     }
     
@@ -220,7 +241,6 @@ function updateSaldo() {
     const totalKeseluruhan = totalSemuaMasuk - totalSemuaKeluar;
     document.getElementById('totalKeseluruhan').textContent = formatRupiah(totalKeseluruhan);
     
-    // Warna saldo
     document.getElementById('saldo').style.color = saldo >= 0 ? '#2ecc71' : '#e74c3c';
 }
 
@@ -251,7 +271,6 @@ function updateStats() {
     document.getElementById('siswaBelum').textContent = siswaBelum;
     document.getElementById('targetIuran').textContent = formatRupiah(targetIuran);
     
-    // Update jumlah transaksi untuk minggu ini
     const transaksiMingguIni = kas.transaksi.filter(t => t.minggu === mingguAktif);
     document.getElementById('jumlahTransaksi').textContent = transaksiMingguIni.length + ' transaksi';
 }
@@ -273,7 +292,7 @@ function tampilkanSiswa() {
     if (siswaMingguIni.length === 0) {
         container.innerHTML = `
             <div style="text-align: center; padding: 20px; color: #666;">
-                <p>Belum ada siswa. Tambahkan siswa terlebih dahulu.</p>
+                <p>Belum ada siswa.</p>
             </div>
         `;
         return;
@@ -296,14 +315,12 @@ function tampilkanSiswa() {
     });
 }
 
-// Toggle status bayar - FIX BUG INI
-// Toggle status bayar - VERSION BARU dengan auto hapus uang
+// Toggle status bayar dengan auto add/remove uang
 function toggleBayar(idSiswa) {
     const kas = dataKas[kasAktif];
     const siswa = kas.siswa.find(s => s.id === idSiswa);
     
     if (siswa) {
-        // Initialize pembayaran object jika belum ada
         if (!siswa.pembayaran) {
             siswa.pembayaran = {};
         }
@@ -313,7 +330,7 @@ function toggleBayar(idSiswa) {
         
         // Jika sebelumnya sudah bayar (sekarang diuncheck)
         if (statusSekarang) {
-            // CARI dan HAPUS transaksi iuran siswa ini untuk minggu ini
+            // HAPUS transaksi iuran siswa ini untuk minggu ini
             kas.transaksi = kas.transaksi.filter(t => 
                 !(t.keterangan.includes(siswa.nama) && 
                   t.minggu === mingguAktif && 
@@ -340,41 +357,11 @@ function toggleBayar(idSiswa) {
         // Update status pembayaran
         siswa.pembayaran[mingguAktif] = statusBaru;
         
-        simpanData();
+        saveDataToGitHub();
         updateStats();
         tampilkanSiswa();
         updateSaldo();
         tampilkanRiwayat();
-    }
-}
-
-// Tambah transaksi otomatis saat siswa bayar
-function tambahTransaksiOtomatis(namaSiswa) {
-    const kas = dataKas[kasAktif];
-    
-    // Cek apakah transaksi untuk siswa ini sudah ada di minggu ini
-    const transaksiSudahAda = kas.transaksi.some(t => 
-        t.keterangan.includes(namaSiswa) && 
-        t.minggu === mingguAktif && 
-        t.tipe === 'masuk'
-    );
-    
-    if (!transaksiSudahAda) {
-        const transaksiBaru = {
-            id: Date.now(),
-            tipe: 'masuk',
-            jumlah: kas.iuran,
-            keterangan: `Iuran dari ${namaSiswa} - Minggu ${mingguAktif}`,
-            tanggal: new Date().toLocaleDateString('id-ID'),
-            waktu: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
-            minggu: mingguAktif
-        };
-        
-        kas.transaksi.unshift(transaksiBaru);
-        simpanData();
-        updateSaldo();
-        tampilkanRiwayat();
-        updateStats();
     }
 }
 
@@ -455,13 +442,8 @@ function tutupModal() {
     modalTerbuka = false;
 }
 
-// Simpan data ke localStorage
-function simpanData() {
-    localStorage.setItem('data_kas', JSON.stringify(dataKas));
-}
-
-// Simpan functions - FIX BUG INI
-function simpanTransaksi() {
+// Simpan functions
+async function simpanTransaksi() {
     const jumlah = parseInt(document.getElementById('jumlah').value);
     const keterangan = document.getElementById('keterangan').value.trim();
     const tipe = document.getElementById('modalTransaksi').dataset.tipe;
@@ -488,22 +470,21 @@ function simpanTransaksi() {
     };
 
     kas.transaksi.unshift(transaksiBaru);
-    simpanData();
+    await saveDataToGitHub();
     
     updateSaldo();
     tampilkanRiwayat();
     updateStats();
     tutupModal();
     
-    // Feedback
     alert('Transaksi berhasil disimpan!');
 }
 
-function simpanIuran() {
+async function simpanIuran() {
     const jumlah = parseInt(document.getElementById('jumlahIuran').value);
     if (jumlah && jumlah > 0) {
         dataKas[kasAktif].iuran = jumlah;
-        simpanData();
+        await saveDataToGitHub();
         updateSaldo();
         updateStats();
         tutupModal();
@@ -513,7 +494,7 @@ function simpanIuran() {
     }
 }
 
-function simpanSiswa() {
+async function simpanSiswa() {
     const nama = document.getElementById('namaSiswa').value.trim();
     if (nama) {
         const kas = dataKas[kasAktif];
@@ -525,7 +506,7 @@ function simpanSiswa() {
             pembayaran: {}
         });
         
-        simpanData();
+        await saveDataToGitHub();
         tampilkanSiswa();
         updateStats();
         tutupModal();
@@ -535,23 +516,18 @@ function simpanSiswa() {
     }
 }
 
-function simpanKasBaru() {
+async function simpanKasBaru() {
     const nama = document.getElementById('namaKasBaru').value.trim();
     if (nama) {
         const key = nama.toLowerCase().replace(/ /g, '_').replace(/[^a-z0-9_]/g, '');
         dataKas[key] = {
             nama: nama,
             transaksi: [],
-            siswa: [
-                { id: 1, nama: "Andi", pembayaran: {} },
-                { id: 2, nama: "Budi", pembayaran: {} },
-                { id: 3, nama: "Citra", pembayaran: {} },
-                { id: 4, nama: "Dewi", pembayaran: {} }
-            ],
-            iuran: 5000
+            siswa: dataKas.kas_kelas.siswa.map(s => ({...s, pembayaran: {}})),
+            iuran: 2000
         };
         
-        simpanData();
+        await saveDataToGitHub();
         kasAktif = key;
         updateTampilan();
         tutupModal();
@@ -564,7 +540,7 @@ function simpanKasBaru() {
 // Ganti kas aktif
 function gantiKas() {
     kasAktif = document.getElementById('selectKas').value;
-    mingguAktif = 1; // Reset ke minggu 1 ketika ganti kas
+    mingguAktif = 1;
     updateTampilan();
 }
 
@@ -595,7 +571,6 @@ function exportData() {
     let csv = `LAPORAN KAS - ${kas.nama}\n`;
     csv += `PERIODE: ${periode.label}\n\n`;
     
-    // Data transaksi untuk minggu ini
     const transaksiMingguIni = kas.transaksi.filter(t => t.minggu === mingguAktif);
     csv += 'RIWAYAT TRANSAKSI MINGGU INI\n';
     csv += 'Tanggal,Waktu,Tipe,Keterangan,Jumlah\n';
@@ -603,7 +578,6 @@ function exportData() {
         csv += `"${item.tanggal}","${item.waktu}","${item.tipe}","${item.keterangan}",${item.jumlah}\n`;
     });
     
-    // Data siswa untuk minggu ini
     csv += '\nDATA SISWA MINGGU INI\n';
     csv += 'Nama,Status,Iuran\n';
     kas.siswa.forEach(siswa => {
@@ -613,7 +587,6 @@ function exportData() {
         csv += `"${siswa.nama}","${status}",${iuran}\n`;
     });
     
-    // Summary minggu ini
     const totalMasuk = transaksiMingguIni.filter(t => t.tipe === 'masuk').reduce((sum, t) => sum + t.jumlah, 0);
     const totalKeluar = transaksiMingguIni.filter(t => t.tipe === 'keluar').reduce((sum, t) => sum + t.jumlah, 0);
     const saldo = totalMasuk - totalKeluar;
@@ -625,34 +598,4 @@ function exportData() {
     csv += `Total Pemasukan,${totalMasuk}\n`;
     csv += `Total Pengeluaran,${totalKeluar}\n`;
     csv += `Saldo Akhir,${saldo}\n`;
-    csv += `Iuran per Siswa,${kas.iuran}\n`;
-    csv += `Siswa Lunas,${siswaLunas}/${kas.siswa.length}\n`;
-    csv += `Target Iuran,${targetIuran}\n`;
-    csv += `Realisasi Iuran,${realisasiIuran}\n`;
-
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `kas-${kas.nama.toLowerCase().replace(/ /g, '-')}-minggu-${mingguAktif}-${new Date().toISOString().split('T')[0]}.csv`;
-    a.click();
-    window.URL.revokeObjectURL(url);
-    
-    alert('Data berhasil diexport!');
-}
-
-// Tutup modal kalau klik di luar
-window.onclick = function(event) {
-    if (modalTerbuka) {
-        const modals = document.querySelectorAll('.modal');
-        modals.forEach(modal => {
-            if (event.target === modal) {
-                tutupModal();
-            }
-        });
-    }
-}
-
-// Initialize app
-
-document.addEventListener('DOMContentLoaded', init);
+    csv
