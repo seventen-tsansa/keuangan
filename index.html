@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keuangan Kelas 7J Portal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>💰 Kas Kelas</h1>
+            <p class="subtitle">Rekap kas kelas - Tahun Ajaran 2025/2026</p>
+        </div>
+
+        <!-- Pilihan Kas & Minggu -->
+        <div class="card">
+            <div class="card-header">
+                <h2>📂 Pilih Kas & Minggu</h2>
+            </div>
+            <div class="selection-grid">
+                <div class="select-group">
+                    <label>Pilih Kas:</label>
+                    <select id="selectKas" onchange="gantiKas()" class="select-custom">
+                        <option value="kas_kelas">Kas Kelas</option>
+                        <option value="hari_guru">Hari Guru</option>
+                    </select>
+                </div>
+                <div class="select-group">
+                    <label>Pilih Minggu:</label>
+                    <select id="selectMinggu" onchange="gantiMinggu()" class="select-custom">
+                        <!-- Options akan diisi oleh JavaScript -->
+                    </select>
+                </div>
+                <button onclick="tambahKasBaru()" class="btn btn-secondary">
+                    <span class="btn-icon">+</span> Kas Baru
+                </button>
+            </div>
+            <div class="week-info">
+                <span id="infoMinggu">Minggu 1: 14-20 Juli 2025</span>
+            </div>
+        </div>
+
+        <!-- Info Saldo -->
+        <div class="card saldo-card">
+            <div class="card-header">
+                <h2>💳 Saldo <span id="namaKas">Kas Kelas</span></h2>
+                <div class="saldo-badges">
+                    <span class="badge" id="infoPeriode">Minggu 1</span>
+                    <span class="badge total-badge" onclick="toggleView()" id="toggleView">🔁 Tampil Total</span>
+                </div>
+            </div>
+            <div class="saldo-amount" id="saldo">Rp 0</div>
+            <div class="saldo-details">
+                <div class="saldo-item">
+                    <span class="label">Pemasukan</span>
+                    <span class="value positive" id="totalMasuk">Rp 0</span>
+                </div>
+                <div class="saldo-item">
+                    <span class="label">Pengeluaran</span>
+                    <span class="value negative" id="totalKeluar">Rp 0</span>
+                </div>
+                <div class="saldo-item">
+                    <span class="label">Iuran per Siswa</span>
+                    <span class="value" id="infoIuran">Rp 0</span>
+                </div>
+                <div class="saldo-item total-item" id="totalKeseluruhanItem" style="display: none;">
+                    <span class="label">Total Keseluruhan</span>
+                    <span class="value" id="totalKeseluruhan">Rp 0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+            <div class="card-header">
+                <h2>🚀 Aksi Cepat</h2>
+            </div>
+            <div class="actions-grid">
+                <button onclick="tambahTransaksi('masuk')" class="action-btn success">
+                    <span class="action-icon">➕</span>
+                    <span class="action-text">Pemasukan</span>
+                </button>
+                <button onclick="tambahTransaksi('keluar')" class="action-btn danger">
+                    <span class="action-icon">➖</span>
+                    <span class="action-text">Pengeluaran</span>
+                </button>
+                <button onclick="kelolaIuran()" class="action-btn warning">
+                    <span class="action-icon">👥</span>
+                    <span class="action-text">Set Iuran</span>
+                </button>
+                <button onclick="exportData()" class="action-btn info">
+                    <span class="action-icon">📥</span>
+                    <span class="action-text">Export</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Daftar Siswa -->
+        <div class="card">
+            <div class="card-header">
+                <h2>👥 Daftar Siswa - <span id="periodeSiswa">Minggu 1</span></h2>
+                <button onclick="tambahSiswa()" class="btn btn-sm btn-primary">
+                    <span class="btn-icon">+</span> Siswa
+                </button>
+            </div>
+            <div class="siswa-stats">
+                <div class="stat">
+                    <span class="stat-number" id="totalSiswa">0</span>
+                    <span class="stat-label">Total</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number positive" id="siswaLunas">0</span>
+                    <span class="stat-label">Lunas</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number negative" id="siswaBelum">0</span>
+                    <span class="stat-label">Belum</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" id="targetIuran">Rp 0</span>
+                    <span class="stat-label">Target</span>
+                </div>
+            </div>
+            <div id="daftarSiswa" class="siswa-list">
+                <!-- Daftar siswa akan muncul di sini -->
+            </div>
+        </div>
+
+        <!-- Riwayat Transaksi -->
+        <div class="card">
+            <div class="card-header">
+                <h2>📋 Riwayat Transaksi - <span id="periodeTransaksi">Minggu 1</span></h2>
+                <span class="badge" id="jumlahTransaksi">0 transaksi</span>
+            </div>
+            <div id="daftarTransaksi" class="transaksi-list">
+                <!-- Riwayat transaksi -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Transaksi -->
+    <div id="modalTransaksi" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Tambah Transaksi</h3>
+                <span class="close" onclick="tutupModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label>Jumlah (Rp)</label>
+                    <input type="number" id="jumlah" placeholder="0" class="input-field">
+                </div>
+                <div class="input-group">
+                    <label>Keterangan</label>
+                    <input type="text" id="keterangan" placeholder="Deskripsi transaksi..." class="input-field">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="tutupModal()" class="btn btn-outline">Batal</button>
+                <button onclick="simpanTransaksi()" class="btn btn-primary">💾 Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Iuran -->
+    <div id="modalIuran" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💰 Set Iuran</h3>
+                <span class="close" onclick="tutupModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label>Jumlah Iuran per Siswa (Rp)</label>
+                    <input type="number" id="jumlahIuran" placeholder="0" class="input-field">
+                </div>
+                <div class="info-box">
+                    <strong>Info:</strong> Iuran ini akan berlaku untuk minggu aktif saat ini
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="tutupModal()" class="btn btn-outline">Batal</button>
+                <button onclick="simpanIuran()" class="btn btn-primary">💾 Set Iuran</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Siswa -->
+    <div id="modalSiswa" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>👥 Tambah Siswa</h3>
+                <span class="close" onclick="tutupModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label>Nama Siswa</label>
+                    <input type="text" id="namaSiswa" placeholder="Masukkan nama siswa..." class="input-field">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="tutupModal()" class="btn btn-outline">Batal</button>
+                <button onclick="simpanSiswa()" class="btn btn-primary">➕ Tambah</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Kas -->
+    <div id="modalKas" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💼 Buat Kas Baru</h3>
+                <span class="close" onclick="tutupModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label>Nama Kas</label>
+                    <input type="text" id="namaKasBaru" placeholder="Contoh: Acara Kelas, Study Tour..." class="input-field">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="tutupModal()" class="btn btn-outline">Batal</button>
+                <button onclick="simpanKasBaru()" class="btn btn-primary">💼 Buat Kas</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
